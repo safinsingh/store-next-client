@@ -15,7 +15,13 @@ export default async function getAuthTokens(
   }
 
   const jar = new CookieJar();
-  const client = wrapper(axios.create({ withCredentials: true, jar }));
+  const client = wrapper(
+    axios.create({
+      withCredentials: true,
+      validateStatus: (s) => s == 200,
+      jar,
+    })
+  );
 
   // Setup session for obtaining Riot ID
   await client.post("https://auth.riotgames.com/api/v1/authorization", {
@@ -25,20 +31,18 @@ export default async function getAuthTokens(
     response_type: "token id_token",
   });
 
-  let authorizationResponse;
-  try {
-    authorizationResponse = await client.put(
-      "https://auth.riotgames.com/api/v1/authorization",
-      {
-        type: "auth",
-        username,
-        password,
-        remember: true,
-        language: "en_US",
-      }
-    );
-  } catch (_) {
-    res.status(200).send("no corrent creds?");
+  const authorizationResponse = await client.put(
+    "https://auth.riotgames.com/api/v1/authorization",
+    {
+      type: "auth",
+      username,
+      password,
+      remember: true,
+      language: "en_US",
+    }
+  );
+  if (authorizationResponse.data.error) {
+    res.status(400).send("Error authenticating user, check your credentials");
     return;
   }
 
@@ -48,8 +52,9 @@ export default async function getAuthTokens(
     "access_token"
   );
   if (!authorizationToken) {
-    res.status(400).send("no auth token?");
-    return;
+    throw new Error(
+      "Error retrieving authentication token from authorization URI"
+    );
   }
 
   const entitlementsResponse = await client.post(
