@@ -1,12 +1,9 @@
+import { AuthTokensResponse } from "pages/api/getAuthTokens";
 import { useEffect, useState } from "react";
 
 const __store_LocalStorageKey = "__store_RiotAuthBundle";
 
-type RiotAuthBundle = {
-  authorizationToken: string;
-  entitlementsToken: string;
-  puuid: string;
-} & { expires: string }; // Riot token lives for 3600 seconds
+export type RiotAuthBundle = AuthTokensResponse & { expires: Date };
 
 export const useAuth = () => {
   const [authBundle, setAuthBundle] = useState<RiotAuthBundle | null>(null);
@@ -25,7 +22,8 @@ export const useAuth = () => {
       setError(null);
     }
 
-    const getAuthTokens = JSON.parse(await getAuthTokensResponse.text());
+    const getAuthTokens: AuthTokensResponse =
+      await getAuthTokensResponse.json();
 
     const now = new Date();
     // now + 55 minutes (well within the 60 minute riot key expiration time)
@@ -45,7 +43,12 @@ export const useAuth = () => {
     const authBundleStorage = localStorage.getItem(__store_LocalStorageKey);
     if (authBundleStorage) {
       const authBundle = JSON.parse(authBundleStorage) as RiotAuthBundle;
-      if (authBundle !== null && new Date(authBundle.expires) > new Date()) {
+      const expiration = new Date(authBundle.expires);
+      console.log(expiration);
+
+      if (authBundle !== null && expiration > new Date()) {
+        // Convert LocalStorage date string to Date for state
+        authBundle.expires = expiration;
         setAuthBundle(authBundle);
       }
     }

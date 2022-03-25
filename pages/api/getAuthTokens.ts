@@ -78,3 +78,9 @@ export default async function getAuthTokens(
     puuid,
   });
 }
+
+export type AuthTokensResponse = {
+  authorizationToken: string;
+  entitlementsToken: string;
+  puuid: string;
+};

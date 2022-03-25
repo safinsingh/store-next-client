@@ -1,7 +1,7 @@
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs/promises";
-import path from "path";
+import { SKINS_JSON, UpdateStoreResponse } from "./updateStore";
 
 export default async function getUserStore(
   req: NextApiRequest,
@@ -20,10 +20,7 @@ export default async function getUserStore(
   );
   const skinsPanelRaw = storefrontResponse.data.SkinsPanelLayout;
 
-  const skinsMapRaw = await fs.readFile(
-    path.join("..", "..", "assets", "skins.json"),
-    "utf-8"
-  );
+  const skinsMapRaw = await fs.readFile(SKINS_JSON, "utf-8");
   const skinsMap = JSON.parse(skinsMapRaw);
 
   const store = {
@@ -32,5 +29,10 @@ export default async function getUserStore(
       (uuid: string) => skinsMap[uuid]
     ),
   };
-  res.status(400).send(store);
+  res.status(200).send(store);
 }
+
+export type UserStoreResponse = {
+  storefrontReset: string;
+  offers: UpdateStoreResponse[];
+};
