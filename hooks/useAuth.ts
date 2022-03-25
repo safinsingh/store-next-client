@@ -36,7 +36,9 @@ export const useAuth = () => {
 
   const clearAuthBundle = () => {
     setAuthBundle(null);
-    localStorage.setItem(__store_LocalStorageKey, "null");
+    if (localStorage.getItem(__store_LocalStorageKey) !== null) {
+      localStorage.removeItem(__store_LocalStorageKey);
+    }
   };
 
   useEffect(() => {

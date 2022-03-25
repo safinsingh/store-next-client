@@ -13,6 +13,7 @@ export type ValorantApiSkin = {
   displayIcon: string;
   levels: Array<{
     uuid: string;
+    displayIcon: string;
   }>;
 };
 export const SkinTierUUIDs: { [uuid: string]: SkinTier } = {
@@ -49,7 +50,7 @@ export default async function updateStore(
 
     skinsReformatted[baseSkin.uuid] = {
       displayName: skin.displayName,
-      image: skin.displayIcon,
+      image: skin.displayIcon || baseSkin.displayIcon,
       skinTier: SkinTierUUIDs[skin.contentTierUuid],
     };
   });

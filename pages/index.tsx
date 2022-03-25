@@ -17,7 +17,8 @@ const Home: NextPage = () => {
     clearAuthBundle,
     error: authError,
   } = useAuth();
-  const { store, error: storeError } = useStore(authBundle);
+  // Store only ever renders if the authBundle is present
+  const { store, error: storeError } = useStore(authBundle!);
   const onSubmit = async (data: FormData) => {
     await createAuthBundle(data.username, data.password);
   };
@@ -38,7 +39,7 @@ const Home: NextPage = () => {
         {authError && <span>Authorization Error: {authError}</span>}
         <button onClick={() => clearAuthBundle()}>Log Out</button>
       </div>
-      {authBundle && store && (
+      {authBundle !== null && store && (
         <div>
           {store.offers.map((offer) => (
             <div>
