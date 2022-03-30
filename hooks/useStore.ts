@@ -5,6 +5,7 @@ import { RiotAuthBundle } from "hooks/useAuth";
 export const useStore = (authBundle: RiotAuthBundle) => {
   const [store, setStore] = useState<UserStoreResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (authBundle === null) return;
@@ -23,10 +24,11 @@ export const useStore = (authBundle: RiotAuthBundle) => {
 
       const storeObject: UserStoreResponse = await storeResponse.json();
       setStore(storeObject);
+      setLoading(false);
     };
 
     getStore();
   }, [authBundle]);
 
-  return { store, error };
+  return { store, error, loading };
 };

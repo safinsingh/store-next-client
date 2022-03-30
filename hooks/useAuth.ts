@@ -8,8 +8,10 @@ export type RiotAuthBundle = AuthTokensResponse & { expires: Date };
 export const useAuth = () => {
   const [authBundle, setAuthBundle] = useState<RiotAuthBundle | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const createAuthBundle = async (username: string, password: string) => {
+    setLoading(true);
     const getAuthTokensResponse = await fetch("/api/getAuthTokens", {
       body: JSON.stringify({ username, password }),
       method: "POST",
@@ -18,8 +20,6 @@ export const useAuth = () => {
     if (getAuthTokensResponse.status != 200) {
       setError(await getAuthTokensResponse.text());
       return;
-    } else {
-      setError(null);
     }
 
     const getAuthTokens: AuthTokensResponse =
@@ -32,13 +32,16 @@ export const useAuth = () => {
     const finalBundle = { ...getAuthTokens, expires };
     setAuthBundle(finalBundle);
     localStorage.setItem(__store_LocalStorageKey, JSON.stringify(finalBundle));
+    setLoading(false);
   };
 
   const clearAuthBundle = () => {
+    setLoading(true);
     setAuthBundle(null);
     if (localStorage.getItem(__store_LocalStorageKey) !== null) {
       localStorage.removeItem(__store_LocalStorageKey);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -54,7 +57,8 @@ export const useAuth = () => {
         setAuthBundle(authBundle);
       }
     }
+    setLoading(false);
   }, []);
 
-  return { authBundle, createAuthBundle, clearAuthBundle, error };
+  return { loading, authBundle, createAuthBundle, clearAuthBundle, error };
 };

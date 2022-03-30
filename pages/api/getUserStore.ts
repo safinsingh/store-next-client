@@ -24,7 +24,9 @@ export default async function getUserStore(
   const skinsMap = JSON.parse(skinsMapRaw);
 
   const store = {
-    storefrontReset: skinsPanelRaw.SingleItemOffersRemainingDurationInSeconds,
+    storefrontReset: Number.parseInt(
+      skinsPanelRaw.SingleItemOffersRemainingDurationInSeconds
+    ),
     offers: skinsPanelRaw.SingleItemOffers.map(
       (uuid: string) => skinsMap[uuid]
     ),
@@ -33,6 +35,6 @@ export default async function getUserStore(
 }
 
 export type UserStoreResponse = {
-  storefrontReset: string;
+  storefrontReset: number;
   offers: UpdateStoreResponse[];
 };
