@@ -3,7 +3,7 @@ name: update_store
 on:
   push:
   schedule:
-    - cron: "0 0 0 1/1 *"
+    - cron: "0 0 0 * *"
 
 jobs:
   curl:
