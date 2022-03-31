@@ -1,6 +1,7 @@
+import { Text } from "@geist-ui/core";
 import { useAuth } from "hooks/useAuth";
 import { useStore } from "hooks/useStore";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -38,8 +39,8 @@ const Store: NextPage = () => {
           {/* if not loading, not null */}
           {store!.offers.map((offer) => (
             <div key={offer.displayName}>
-              <h1>{offer.displayName}</h1>
-              <Image src={offer.image} layout="fill" />
+              <Text>{offer.displayName}</Text>
+              <Image src={offer.image} layout="fixed" width={30} height={50} />
               <p>Tier: {offer.skinTier}</p>
             </div>
           ))}

@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "hooks/useAuth";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { Page, Input, Text, Dot, Button, Grid, Spacer } from "@geist-ui/core";
 
 type FormData = { username: string; password: string };
 
@@ -31,21 +32,43 @@ const Home: NextPage = () => {
   }, [authLoading]);
 
   return (
-    <>
+    <Page>
+      <Text h1>Login</Text>
+      <Spacer h={1} />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input {...register("username", { required: true })}></input>
-        {errors.username && <span>This field is required</span>}
-        <input
-          type="password"
+        <Input
+          placeholder="Username"
+          {...register("username", { required: true })}
+          width="100%"
+        >
+          {errors.username && (
+            <Dot type="error">
+              <Text small>This field is required</Text>
+            </Dot>
+          )}
+        </Input>
+        <Spacer h={1} />
+        <Input.Password
+          width="100%"
+          placeholder="Password"
           {...register("password", { required: true })}
-        ></input>
-        {errors.password && <span>This field is required</span>}
-        <input type="submit" />
+        >
+          {errors.password && (
+            <Dot type="error">
+              <Text small>This field is required</Text>
+            </Dot>
+          )}
+        </Input.Password>
+        <Spacer h={1} />
+        <Button loading={authLoading} htmlType="submit" width="100%">
+          Log In
+        </Button>
+        <Spacer h={1} />
+        <Button onClick={() => clearAuthBundle()} ghost width="100%">
+          Log Out
+        </Button>
       </form>
-      {authError && <span>Authorization Error: {authError}</span>}
-      <button onClick={() => clearAuthBundle()}>Log Out</button>
-      {authLoading && <span>loading...</span>}
-    </>
+    </Page>
   );
 };
 
