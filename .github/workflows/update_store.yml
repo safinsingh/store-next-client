@@ -1,0 +1,12 @@
+on:
+  push:
+  schedule:
+    - cron: "0 0 0 1/1 *"
+jobs:
+  curl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: curl
+        uses: wei/curl@master
+        with:
+          args: '-H "Content-Type: application/json" -X POST -d "{"key": $JSON_UPLOAD_SECRET}" https://https://val-store-check-2525.vercel.app/api/updateStore'

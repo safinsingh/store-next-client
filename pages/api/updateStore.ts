@@ -4,7 +4,7 @@ import axios from "axios";
 import path from "path";
 import fs from "fs/promises";
 
-const { __JSON_UPLOAD_SECRET } = process.env;
+const { JSON_UPLOAD_SECRET } = process.env;
 
 export type SkinTier = "Select" | "Deluxe" | "Premium" | "Ultra" | "Exclusive";
 export type ValorantApiSkin = {
@@ -30,8 +30,12 @@ export default async function updateStore(
   res: NextApiResponse
 ) {
   const { key } = req.body;
+  const secretBuffer = Buffer.from(JSON_UPLOAD_SECRET);
+  const keyBuffer = Buffer.from(key);
+
   if (
-    !crypto.timingSafeEqual(Buffer.from(__JSON_UPLOAD_SECRET), Buffer.from(key))
+    secretBuffer.length !== keyBuffer.length ||
+    !crypto.timingSafeEqual(secretBuffer, keyBuffer)
   ) {
     res.status(400).send("Error authorizing store update request!");
     return;
