@@ -42,8 +42,8 @@ const Store: NextPage = () => {
           <Grid.Container gap={2} justify="center">
             {/* if not loading, not null */}
             {store!.offers.map((offer) => (
-              <Grid xs={6} key={offer.displayName}>
-                <Display shadow caption={offer.displayName}>
+              <Grid xs={24} md={12} lg={6} key={offer.displayName}>
+                <Display shadow caption={offer.displayName} width="100%">
                   <Image height="16rem" src={offer.image} padding="1rem" />
                 </Display>
               </Grid>
