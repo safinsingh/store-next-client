@@ -12,4 +12,9 @@ jobs:
       - name: curl
         uses: wei/curl@master
         with:
-          args: '-H "Content-Type: application/json" -X POST -d "{\"key\": \"$JSON_UPLOAD_SECRET\""}" https://val-store-check-2525.vercel.app/api/updateStore'
+          args: '
+            -H "Content-Type: application/json"
+            -X POST
+            -d ''{"key": "$JSON_UPLOAD_SECRET"}''
+            https://val-store-check-2525.vercel.app/api/updateStore
+          '
