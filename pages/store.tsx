@@ -1,8 +1,7 @@
-import { Text } from "@geist-ui/core";
+import { Display, Page, Text, Image, Grid, Button } from "@geist-ui/core";
 import { useAuth } from "hooks/useAuth";
 import { useStore } from "hooks/useStore";
 import type { GetServerSideProps, NextPage } from "next";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Countdown from "react-countdown";
@@ -30,25 +29,33 @@ const Store: NextPage = () => {
   };
 
   return (
-    <>
+    <Page>
+      <Text h1>Your Store</Text>
       {storeLoading ? (
         <span>loading...</span>
       ) : (
         <div>
-          <Countdown date={Date.now() + store!.storefrontReset * 1000} />
-          {/* if not loading, not null */}
-          {store!.offers.map((offer) => (
-            <div key={offer.displayName}>
-              <Text>{offer.displayName}</Text>
-              <Image src={offer.image} layout="fixed" width={30} height={50} />
-              <p>Tier: {offer.skinTier}</p>
-            </div>
-          ))}
+          <Text>
+            Time remaining:{" "}
+            <Countdown date={Date.now() + store!.storefrontReset * 1000} />
+          </Text>
+          <Grid.Container gap={2} justify="center">
+            {/* if not loading, not null */}
+            {store!.offers.map((offer) => (
+              <Grid xs={6} key={offer.displayName}>
+                <Display shadow caption={offer.displayName}>
+                  <Image height="16rem" src={offer.image} padding="1rem" />
+                </Display>
+              </Grid>
+            ))}
+          </Grid.Container>
           {storeError && <span>Error fetching store: {storeError}</span>}
+          <Button onClick={() => logout()} ghost>
+            Log Out
+          </Button>
         </div>
       )}
-      <button onClick={() => logout()}>Log Out</button>
-    </>
+    </Page>
   );
 };
 

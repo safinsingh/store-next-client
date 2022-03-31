@@ -50,7 +50,7 @@ export default async function updateStore(
 
     skinsReformatted[baseSkin.uuid] = {
       displayName: skin.displayName,
-      image: skin.displayIcon || baseSkin.displayIcon,
+      image: baseSkin.displayIcon,
       skinTier: SkinTierUUIDs[skin.contentTierUuid],
     };
   });

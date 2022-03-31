@@ -35,39 +35,41 @@ const Home: NextPage = () => {
     <Page>
       <Text h1>Login</Text>
       <Spacer h={1} />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          placeholder="Username"
-          {...register("username", { required: true })}
-          width="100%"
-        >
-          {errors.username && (
-            <Dot type="error">
-              <Text small>This field is required</Text>
-            </Dot>
-          )}
-        </Input>
-        <Spacer h={1} />
-        <Input.Password
-          width="100%"
-          placeholder="Password"
-          {...register("password", { required: true })}
-        >
-          {errors.password && (
-            <Dot type="error">
-              <Text small>This field is required</Text>
-            </Dot>
-          )}
-        </Input.Password>
-        <Spacer h={1} />
-        <Button loading={authLoading} htmlType="submit" width="100%">
-          Log In
-        </Button>
-        <Spacer h={1} />
-        <Button onClick={() => clearAuthBundle()} ghost width="100%">
-          Log Out
-        </Button>
-      </form>
+      <div style={{ maxWidth: "16rem" }}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Input
+            placeholder="Username"
+            {...register("username", { required: true })}
+            width="100%"
+          >
+            {errors.username && (
+              <Dot type="error">
+                <Text small>This field is required</Text>
+              </Dot>
+            )}
+          </Input>
+          <Spacer h={1} />
+          <Input.Password
+            width="100%"
+            placeholder="Password"
+            {...register("password", { required: true })}
+          >
+            {errors.password && (
+              <Dot type="error">
+                <Text small>This field is required</Text>
+              </Dot>
+            )}
+          </Input.Password>
+          <Spacer h={1} />
+          <Button loading={authLoading} htmlType="submit" width="100%">
+            Log In
+          </Button>
+          <Spacer h={1} />
+          <Button onClick={() => clearAuthBundle()} ghost width="100%">
+            Log Out
+          </Button>
+        </form>
+      </div>
     </Page>
   );
 };
