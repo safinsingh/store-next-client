@@ -43,8 +43,8 @@ const Store: NextPage = () => {
             {/* if not loading, not null */}
             {store!.offers.map((offer) => (
               <Grid xs={24} md={12} lg={6} key={offer.displayName}>
-                <Display shadow caption={offer.displayName} width="100%">
-                  <Image height="16rem" src={offer.image} padding="1rem" />
+                <Display shadow caption={offer.displayName}>
+                  <Image src={offer.image} padding="1rem" height="14rem" />
                 </Display>
               </Grid>
             ))}
@@ -55,6 +55,9 @@ const Store: NextPage = () => {
           </Button>
         </div>
       )}
+      <Page.Footer>
+        <Text type="secondary">Safin Singh © 2022</Text>
+      </Page.Footer>
     </Page>
   );
 };

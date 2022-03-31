@@ -70,6 +70,9 @@ const Home: NextPage = () => {
           </Button>
         </form>
       </div>
+      <Page.Footer>
+        <Text type="secondary">Safin Singh © 2022</Text>
+      </Page.Footer>
     </Page>
   );
 };
