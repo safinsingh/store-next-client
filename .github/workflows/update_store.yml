@@ -3,7 +3,7 @@ name: update_store
 on:
   push:
   schedule:
-    - cron: "0 0 0 * *"
+    - cron: "0 0 * * *"
 
 jobs:
   curl:
@@ -12,4 +12,4 @@ jobs:
       - name: curl
         uses: wei/curl@master
         with:
-          args: '-H "Content-Type: application/json" -X POST -d "{"key": $JSON_UPLOAD_SECRET}" https://val-store-check-2525.vercel.app/api/updateStore'
+          args: '-H "Content-Type: application/json" -X POST -d "{\"key\": \"$JSON_UPLOAD_SECRET\""}" https://val-store-check-2525.vercel.app/api/updateStore'
