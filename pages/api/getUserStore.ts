@@ -18,12 +18,14 @@ export default async function getUserStore(
       },
     }
   );
+  const storefrontData = storefrontResponse.data;
   const skinsPanelRaw = storefrontResponse.data.SkinsPanelLayout;
 
   const skinsMapRaw = await fs.readFile(SKINS_JSON, "utf-8");
-  const skinsMap = JSON.parse(skinsMapRaw);
+  const skinsMap: { [uuid: string]: UpdateStoreResponse } =
+    JSON.parse(skinsMapRaw);
 
-  const store = {
+  const store: UserStoreResponse = {
     storefrontReset: Number.parseInt(
       skinsPanelRaw.SingleItemOffersRemainingDurationInSeconds
     ),
@@ -31,10 +33,43 @@ export default async function getUserStore(
       (uuid: string) => skinsMap[uuid]
     ),
   };
+
+  if (storefrontData.BonusStore) {
+    store.nightMarket = {
+      nightMarketReset:
+        storefrontData.BonusStore.BonusStoreRemainingDurationInSeconds,
+      offers: storefrontData.BonusStore.BonusStoreOffers.map(
+        (item: BonusStoreOffer) => ({
+          storeItem: skinsMap[item.Offer.OfferID],
+          price: item.Offer.Cost[0],
+          discountPrice: item.DiscountCosts[0],
+        })
+      ),
+    };
+  }
+
   res.status(200).send(store);
 }
+
+type BonusStoreOffer = {
+  Offer: {
+    Cost: number[];
+    OfferID: string;
+  };
+  DiscountCosts: number[];
+};
+
+export type NightMarketItem = {
+  storeItem: UpdateStoreResponse;
+  price: number;
+  discountPrice: number;
+};
 
 export type UserStoreResponse = {
   storefrontReset: number;
   offers: UpdateStoreResponse[];
+  nightMarket?: {
+    nightMarketReset: number;
+    offers: NightMarketItem[];
+  };
 };

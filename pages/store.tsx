@@ -30,11 +30,11 @@ const Store: NextPage = () => {
 
   return (
     <Page>
-      <Text h1>Your Store</Text>
       {storeLoading ? (
         <span>loading...</span>
       ) : (
-        <div>
+        <>
+          <Text h1>Your Store</Text>
           <Text>
             Time remaining:{" "}
             <Countdown date={Date.now() + store!.storefrontReset * 1000} />
@@ -49,11 +49,36 @@ const Store: NextPage = () => {
               </Grid>
             ))}
           </Grid.Container>
+          {store!.nightMarket && (
+            <>
+              <Text h1>Your Night Market</Text>
+              <Text>
+                Night Market time remaining:{" "}
+                <Countdown
+                  date={Date.now() + store!.nightMarket.nightMarketReset * 1000}
+                />
+              </Text>
+            </>
+          )}
+          <Grid.Container gap={2} justify="center">
+            {store!.nightMarket!.offers.map((offer) => (
+              <Grid xs={24} md={12} lg={6} key={offer.storeItem.displayName}>
+                <Display shadow caption={offer.storeItem.displayName}>
+                  <Image
+                    src={offer.storeItem.image}
+                    padding="1rem"
+                    height="14rem"
+                  />
+                </Display>
+              </Grid>
+            ))}
+          </Grid.Container>
+
           {storeError && <span>Error fetching store: {storeError}</span>}
           <Button onClick={() => logout()} ghost>
             Log Out
           </Button>
-        </div>
+        </>
       )}
       <Page.Footer>
         <Text type="secondary">Safin Singh © 2022</Text>
