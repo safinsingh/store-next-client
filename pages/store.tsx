@@ -63,7 +63,15 @@ const Store: NextPage = () => {
           <Grid.Container gap={2} justify="center">
             {store!.nightMarket!.offers.map((offer) => (
               <Grid xs={24} md={12} lg={6} key={offer.storeItem.displayName}>
-                <Display shadow caption={offer.storeItem.displayName}>
+                <Display
+                  shadow
+                  caption={
+                    offer.storeItem.displayName +
+                    " | Price: " +
+                    offer.discountPrice.toString() +
+                    " VP"
+                  }
+                >
                   <Image
                     src={offer.storeItem.image}
                     padding="1rem"

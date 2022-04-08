@@ -41,8 +41,7 @@ export default async function getUserStore(
       offers: storefrontData.BonusStore.BonusStoreOffers.map(
         (item: BonusStoreOffer) => ({
           storeItem: skinsMap[item.Offer.OfferID],
-          price: item.Offer.Cost[0],
-          discountPrice: item.DiscountCosts[0],
+          discountPrice: Object.values(item.DiscountCosts)[0],
         })
       ),
     };
@@ -53,15 +52,13 @@ export default async function getUserStore(
 
 type BonusStoreOffer = {
   Offer: {
-    Cost: number[];
     OfferID: string;
   };
-  DiscountCosts: number[];
+  DiscountCosts: Array<{ [uuid: string]: number }>;
 };
 
 export type NightMarketItem = {
   storeItem: UpdateStoreResponse;
-  price: number;
   discountPrice: number;
 };
 
